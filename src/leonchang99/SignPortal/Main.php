@@ -77,7 +77,7 @@ class Main extends PluginBase implements Listener{
             $sign = $event->getLines();
             if($sign[0]=='[WORLD]'){
                 //Server::getInstance()->broadcastMessage("lv2");
-                if($event->getPlayer()->isOp()){
+                if($event->getPlayer()->hasPermission("signportal.create")){
                     //Server::getInstance()->broadcastMessage("lv3");
                     if(empty($sign[1]) !==true){
                         //Server::getInstance()->broadcastMessage("lv4");
@@ -96,7 +96,7 @@ class Main extends PluginBase implements Listener{
                     $event->setLine(0,"[BROKEN]");
                     return false;
                 }
-            $event->getPlayer()->sendMessage("[SignPortal] You must be an OP to make a portal");
+            $event->getPlayer()->sendMessage("[SignPortal] You need signportal.create permission to make a portal");
             //Server::getInstance()->broadcastMessage("f2");
             $event->setLine(0,"[BROKEN]");
             return false;

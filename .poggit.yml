@@ -1,0 +1,8 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/poggit-orphanage/SignPortal
+branches:
+- master
+projects:
+  SignPortal:
+    path: ""
+    icon: signportal.png
+...

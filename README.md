@@ -1,9 +1,10 @@
-SignPortal v1.1.1
+SignPortal
 ==========
+
+SignPortal is used to create portals to other worlds using signs.
 
 PocketMine-MP multiworld sign portal
 Supports PocketMine 1.6.2dev
-Stripped down version of previous plugin due to incompleteness of API
 
 ## Configuration
 No Configuration as of this update
@@ -24,9 +25,11 @@ Create a sign with the format below
  
 The rest of the sign can be whatever desired
 
-SignPortal is used to create portals to other worlds using signs.
-
 ##Features:
+
+signportal.create permission to create world signs
+
+signportal.command.generate permission to use /generate
 
 Checks for existing world on teleport attempt to prevent crashes
 

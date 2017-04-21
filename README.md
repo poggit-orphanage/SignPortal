@@ -12,8 +12,14 @@ No Configuration as of this update
 Create a sign with the format below
 
 ```
- - [WORLD]
- - <worldname>
+[WORLD]
+<worldname>
+ ```
+ 
+ An example for teleporting the the world 'testworld' would be:
+ ```
+ [WORLD]
+ testworld
  ```
  
 The rest of the sign can be whatever desired
@@ -36,19 +42,3 @@ World existence test - fixes most crashes
 
 Drop the plugin into the plugins/ folder
 Restart the server
-
-Usage:
-Follow the sign format below to create a portal:
-```
-[WORLD]
-<worldname>
-```
-An example for teleporting the the world 'testworld' would be:
-```
-[WORLD]
-testworld
-```
-
-The rest of the sign can be used as desired
-
-The /generate command is for testing only, tread carefully

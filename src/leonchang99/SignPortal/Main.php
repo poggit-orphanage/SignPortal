@@ -7,10 +7,8 @@ use pocketmine\event\Listener;
 use pocketmine\Server;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\math\Vector3;
 use pocketmine\tile\Sign;
-use pocketmine\event\block\SignChangeEvent;
 /** Not currently used but may be later used  */
 use pocketmine\level\Position;
 use pocketmine\entity\Entity;
@@ -18,31 +16,35 @@ use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\item\Item;
 use pocketmine\tile\Tile;
+use pocketmine\utils\Config;
+use pocketmine\utils\TextFormat;
 
-class Main extends PluginBase implements Listener{
+class Main extends PluginBase implements Listener {
+    
+    const PREFIX = TextFormat::GREEN . "[" . "SignPortal" . "]" . TextFormat::RESET . " ";
     private $api, $server, $path;
 
-    public function onEnable(){
+    public function onEnable() {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
     }
 
-    public function playerBlockTouch(PlayerInteractEvent $event){
-        if($event->getBlock()->getID() == 323 || $event->getBlock()->getID() == 63 || $event->getBlock()->getID() == 68){
+    public function onPlayerInteract(\pocketmine\event\player\PlayerInteractEvent $event) {
+        if($event->getBlock()->getID() == 323 || $event->getBlock()->getID() == 63 || $event->getBlock()->getID() == 68) {
             $sign = $event->getPlayer()->getLevel()->getTile($event->getBlock());
-            if(!($sign instanceof Sign)){
+            if(!($sign instanceof Sign)) {
                 return;
             }
             $sign = $sign->getText();
             if($sign[0]=='[WORLD]'){
-                if(empty($sign[1]) !== true){
+                if(empty($sign[1]) !== true) {
                     $mapname = $sign[1];
-                    $event->getPlayer()->sendMessage("[SignPortal] Preparing world '".$mapname."'");
+                    $event->getPlayer()->sendMessage(self::PREFIX . TextFormat::AQUA . "Preparing world '".$mapname."'");
                     //Prevents most crashes
                     if(Server::getInstance()->loadLevel($mapname) != false){
-                        $event->getPlayer()->sendMessage("[SignPortal] Teleporting...");
+                        $event->getPlayer()->sendMessage(self::PREFIX . TextFormat::GREEN . "Teleporting...");
                         $event->getPlayer()->teleport(Server::getInstance()->getLevelByName($mapname)->getSafeSpawn());
                     }else{
-                        $event->getPlayer()->sendMessage("[SignPortal] World '".$mapname."' not found.");
+                        $event->getPlayer()->sendMessage(self::PREFIX . TextFormat::RED . "World '".$mapname."' not found.");
                     }
                 }
             }
@@ -56,7 +58,7 @@ class Main extends PluginBase implements Listener{
             case "generate":
                 if(isset($args[0])){
                     Server::getInstance()->generateLevel($args[0]);
-                    $sender->sendMessage("[SignPortal] World ".$args[0]." is being generated");
+                    $sender->sendMessage(self::PREFIX . TextFormat::AQUA . "World " . $args[0] . " is being generated");
                 }else{
                     $sender->sendMessage("Usage /generate <worldname>");
                 }
@@ -67,7 +69,7 @@ class Main extends PluginBase implements Listener{
     }
 
     /** Stuff for next update once SignChangeEvent is implemented */
-    public function tileupdate(SignChangeEvent $event){
+    public function onSignChange(\pocketmine\event\block\SignChangeEvent $event){
         if($event->getBlock()->getID() == 323 || $event->getBlock()->getID() == 63 || $event->getBlock()->getID() == 68){
             //Server::getInstance()->broadcastMessage("lv1");
             $sign = $event->getPlayer()->getLevel()->getTile($event->getBlock());
@@ -83,20 +85,20 @@ class Main extends PluginBase implements Listener{
                         //Server::getInstance()->broadcastMessage("lv4");
                         if(Server::getInstance()->loadLevel($sign[1])!==false){
                             //Server::getInstance()->broadcastMessage("lv5");
-                            $event->getPlayer()->sendMessage("[SignPortal] Portal to world '".$sign[1]."' created");
+                            $event->getPlayer()->sendMessage(self::PREFIX . TextFormat::GREEN . "Portal to world '".$sign[1]."' created");
                             return true;
                         }
-                        $event->getPlayer()->sendMessage("[SignPortal] World '".$sign[1]."' does not exist!");
+                        $event->getPlayer()->sendMessage(self::PREFIX . TextFormat::RED . "World '".$sign[1]."' does not exist!");
                         //Server::getInstance()->broadcastMessage("f4");
                         $event->setLine(0,"[BROKEN]");
                         return false;
                     }
-                    $event->getPlayer()->sendMessage("[SignPortal] World name not set");
+                    $event->getPlayer()->sendMessage(self::PREFIX . TextFormat::RED . " World name not set");
                     //Server::getInstance()->broadcastMessage("f3");
                     $event->setLine(0,"[BROKEN]");
                     return false;
                 }
-            $event->getPlayer()->sendMessage("[SignPortal] You need signportal.create permission to make a portal");
+            $event->getPlayer()->sendMessage(self::PREFIX . TextFormat::RED . "You need signportal.create permission to make a portal");
             //Server::getInstance()->broadcastMessage("f2");
             $event->setLine(0,"[BROKEN]");
             return false;

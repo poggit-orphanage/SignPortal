@@ -49,7 +49,7 @@ class Main extends PluginBase implements Listener{
         }
     }
 
-    public function onCommand(CommandSender $sender, Command $command, $label, array $args){
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
         //Commands are just for development only, tread carefully...
         switch($command->getName()){
             //Very basic world generation command for world teleportation testing
